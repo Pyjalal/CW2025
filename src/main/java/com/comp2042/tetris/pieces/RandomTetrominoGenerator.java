@@ -6,27 +6,27 @@ import java.util.Deque;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class RandomBrickGenerator implements BrickGenerator {
+public class RandomTetrominoGenerator implements TetrominoGenerator {
 
-    private final List<Brick> brickList;
+    private final List<Tetromino> brickList;
 
-    private final Deque<Brick> nextBricks = new ArrayDeque<>();
+    private final Deque<Tetromino> nextBricks = new ArrayDeque<>();
 
-    public RandomBrickGenerator() {
+    public RandomTetrominoGenerator() {
         brickList = new ArrayList<>();
-        brickList.add(new IBrick());
-        brickList.add(new JBrick());
-        brickList.add(new LBrick());
-        brickList.add(new OBrick());
-        brickList.add(new SBrick());
-        brickList.add(new TBrick());
-        brickList.add(new ZBrick());
+        brickList.add(new IPiece());
+        brickList.add(new JPiece());
+        brickList.add(new LPiece());
+        brickList.add(new OPiece());
+        brickList.add(new SPiece());
+        brickList.add(new TPiece());
+        brickList.add(new ZPiece());
         nextBricks.add(brickList.get(ThreadLocalRandom.current().nextInt(brickList.size())));
         nextBricks.add(brickList.get(ThreadLocalRandom.current().nextInt(brickList.size())));
     }
 
     @Override
-    public Brick getBrick() {
+    public Tetromino getBrick() {
         if (nextBricks.size() <= 1) {
             nextBricks.add(brickList.get(ThreadLocalRandom.current().nextInt(brickList.size())));
         }
@@ -34,7 +34,7 @@ public class RandomBrickGenerator implements BrickGenerator {
     }
 
     @Override
-    public Brick getNextBrick() {
+    public Tetromino getNextBrick() {
         return nextBricks.peek();
     }
 }

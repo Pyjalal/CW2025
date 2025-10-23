@@ -3,7 +3,7 @@ package com.comp2042.tetris.controllers;
 
 import com.comp2042.tetris.core.Board;
 
-import com.comp2042.tetris.core.SimpleBoard;
+import com.comp2042.tetris.core.TetrisBoard;
 
 import com.comp2042.tetris.ui.GuiController;
 
@@ -18,7 +18,7 @@ import com.comp2042.tetris.models.ViewData;
 import com.comp2042.tetris.models.ClearRow;
 public class GameController implements InputEventListener {
 
-    private Board board = new SimpleBoard(25, 10);
+    private Board board = new TetrisBoard(25, 10);
 
     private final GuiController viewGuiController;
 

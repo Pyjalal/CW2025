@@ -2,11 +2,11 @@ package com.comp2042.tetris.controllers;
 
 
 import com.comp2042.tetris.models.NextShapeInfo;
-import com.comp2042.tetris.pieces.Brick;
+import com.comp2042.tetris.pieces.Tetromino;
 
-public class BrickRotator {
+public class TetrominoRotator {
 
-    private Brick brick;
+    private Tetromino brick;
     private int currentShape = 0;
 
     public NextShapeInfo getNextShape() {
@@ -23,7 +23,7 @@ public class BrickRotator {
         this.currentShape = currentShape;
     }
 
-    public void setBrick(Brick brick) {
+    public void setBrick(Tetromino brick) {
         this.brick = brick;
         currentShape = 0;
     }

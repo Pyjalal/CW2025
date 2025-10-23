@@ -3,33 +3,33 @@ package com.comp2042.tetris.core;
 
 import com.comp2042.tetris.pieces.*;
 
-import com.comp2042.tetris.controllers.BrickRotator;
+import com.comp2042.tetris.controllers.TetrominoRotator;
 
 import com.comp2042.tetris.utils.MatrixOperations;
 
 import com.comp2042.tetris.models.*;
-import com.comp2042.tetris.pieces.Brick;
-import com.comp2042.tetris.pieces.BrickGenerator;
-import com.comp2042.tetris.pieces.RandomBrickGenerator;
+import com.comp2042.tetris.pieces.Tetromino;
+import com.comp2042.tetris.pieces.TetrominoGenerator;
+import com.comp2042.tetris.pieces.RandomTetrominoGenerator;
 
 import java.awt.*;
 
-public class SimpleBoard implements Board {
+public class TetrisBoard implements Board {
 
     private final int width;
     private final int height;
-    private final BrickGenerator brickGenerator;
-    private final BrickRotator brickRotator;
+    private final TetrominoGenerator brickGenerator;
+    private final TetrominoRotator brickRotator;
     private int[][] currentGameMatrix;
     private Point currentOffset;
     private final Score score;
 
-    public SimpleBoard(int width, int height) {
+    public TetrisBoard(int width, int height) {
         this.width = width;
         this.height = height;
         currentGameMatrix = new int[width][height];
-        brickGenerator = new RandomBrickGenerator();
-        brickRotator = new BrickRotator();
+        brickGenerator = new RandomTetrominoGenerator();
+        brickRotator = new TetrominoRotator();
         score = new Score();
     }
 
@@ -91,7 +91,7 @@ public class SimpleBoard implements Board {
 
     @Override
     public boolean createNewBrick() {
-        Brick currentBrick = brickGenerator.getBrick();
+        Tetromino currentBrick = brickGenerator.getBrick();
         brickRotator.setBrick(currentBrick);
         currentOffset = new Point(4, 10);
         return MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());

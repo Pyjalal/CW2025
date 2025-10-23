@@ -5,15 +5,21 @@ import com.comp2042.tetris.utils.MatrixOperations;
 import java.util.ArrayList;
 import java.util.List;
 
-final class OBrick implements Brick {
+final class SPiece implements Tetromino {
 
     private final List<int[][]> brickMatrix = new ArrayList<>();
 
-    public OBrick() {
+    public SPiece() {
         brickMatrix.add(new int[][]{
                 {0, 0, 0, 0},
-                {0, 4, 4, 0},
-                {0, 4, 4, 0},
+                {0, 5, 5, 0},
+                {5, 5, 0, 0},
+                {0, 0, 0, 0}
+        });
+        brickMatrix.add(new int[][]{
+                {5, 0, 0, 0},
+                {5, 5, 0, 0},
+                {0, 5, 0, 0},
                 {0, 0, 0, 0}
         });
     }
@@ -22,5 +28,4 @@ final class OBrick implements Brick {
     public List<int[][]> getShapeMatrix() {
         return MatrixOperations.deepCopyList(brickMatrix);
     }
-
 }

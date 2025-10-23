@@ -2,7 +2,7 @@ package com.comp2042.tetris.pieces;
 
 import java.util.List;
 
-public interface Brick {
+public interface Tetromino {
 
     List<int[][]> getShapeMatrix();
 }

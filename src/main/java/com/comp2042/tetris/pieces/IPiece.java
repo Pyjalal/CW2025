@@ -5,22 +5,22 @@ import com.comp2042.tetris.utils.MatrixOperations;
 import java.util.ArrayList;
 import java.util.List;
 
-final class ZBrick implements Brick {
+final class IPiece implements Tetromino {
 
     private final List<int[][]> brickMatrix = new ArrayList<>();
 
-    public ZBrick() {
+    public IPiece() {
         brickMatrix.add(new int[][]{
                 {0, 0, 0, 0},
-                {7, 7, 0, 0},
-                {0, 7, 7, 0},
+                {1, 1, 1, 1},
+                {0, 0, 0, 0},
                 {0, 0, 0, 0}
         });
         brickMatrix.add(new int[][]{
-                {0, 7, 0, 0},
-                {7, 7, 0, 0},
-                {7, 0, 0, 0},
-                {0, 0, 0, 0}
+                {0, 1, 0, 0},
+                {0, 1, 0, 0},
+                {0, 1, 0, 0},
+                {0, 1, 0, 0}
         });
     }
 
@@ -28,4 +28,5 @@ final class ZBrick implements Brick {
     public List<int[][]> getShapeMatrix() {
         return MatrixOperations.deepCopyList(brickMatrix);
     }
+
 }
