@@ -91,7 +91,7 @@ public class TetrisBoard implements Board {
 
     @Override
     public boolean createNewBrick() {
-        Tetromino currentBrick = brickGenerator.getBrick();
+        Tetromino currentBrick = brickGenerator.getTetromino();
         brickRotator.setBrick(currentBrick);
         currentOffset = new Point(4, 10);
         return MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
@@ -104,7 +104,7 @@ public class TetrisBoard implements Board {
 
     @Override
     public ViewData getViewData() {
-        return new ViewData(brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY(), brickGenerator.getNextBrick().getShapeMatrix().get(0));
+        return new ViewData(brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY(), brickGenerator.getNextTetromino().getShapeMatrix().get(0));
     }
 
     @Override

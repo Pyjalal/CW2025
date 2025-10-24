@@ -1,21 +1,15 @@
 package com.comp2042.tetris.controllers;
 
-
 import com.comp2042.tetris.core.Board;
-
 import com.comp2042.tetris.core.TetrisBoard;
-
 import com.comp2042.tetris.ui.GuiController;
-
 import com.comp2042.tetris.events.InputEventListener;
-
 import com.comp2042.tetris.events.MoveEvent;
-
+import com.comp2042.tetris.events.EventSource;
 import com.comp2042.tetris.models.DownData;
-
 import com.comp2042.tetris.models.ViewData;
-
 import com.comp2042.tetris.models.ClearRow;
+
 public class GameController implements InputEventListener {
 
     private Board board = new TetrisBoard(25, 10);
