@@ -12,40 +12,60 @@ import com.comp2042.tetris.models.ClearRow;
 
 public class GameController implements InputEventListener {
 
-    private Board board = new TetrisBoard(25, 10);
+    private static final int BOARD_WIDTH = 25;
+    private static final int BOARD_HEIGHT = 10;
+    private static final int SOFT_DROP_SCORE = 1;
 
-    private final GuiController viewGuiController;
+    private final Board board;
+    private final GuiController guiController;
 
-    public GameController(GuiController c) {
-        viewGuiController = c;
+    public GameController(GuiController guiController) {
+        this.board = new TetrisBoard(BOARD_WIDTH, BOARD_HEIGHT);
+        this.guiController = guiController;
+        initializeGame();
+    }
+
+    private void initializeGame() {
         board.createNewBrick();
-        viewGuiController.setEventListener(this);
-        viewGuiController.initGameView(board.getBoardMatrix(), board.getViewData());
-        viewGuiController.bindScore(board.getScore().scoreProperty());
+        guiController.setEventListener(this);
+        guiController.initGameView(board.getBoardMatrix(), board.getViewData());
+        guiController.bindScore(board.getScore().scoreProperty());
     }
 
     @Override
     public DownData onDownEvent(MoveEvent event) {
         boolean canMove = board.moveBrickDown();
         ClearRow clearRow = null;
+
         if (!canMove) {
-            board.mergeBrickToBackground();
-            clearRow = board.clearRows();
-            if (clearRow.getLinesRemoved() > 0) {
-                board.getScore().add(clearRow.getScoreBonus());
-            }
-            if (board.createNewBrick()) {
-                viewGuiController.gameOver();
-            }
-
-            viewGuiController.refreshGameBackground(board.getBoardMatrix());
-
+            clearRow = handleTetrominoLocked();
         } else {
-            if (event.getEventSource() == EventSource.USER) {
-                board.getScore().add(1);
-            }
+            handleSoftDrop(event);
         }
+
         return new DownData(clearRow, board.getViewData());
+    }
+
+    private ClearRow handleTetrominoLocked() {
+        board.mergeBrickToBackground();
+        ClearRow clearRow = board.clearRows();
+
+        if (clearRow.getLinesRemoved() > 0) {
+            board.getScore().add(clearRow.getScoreBonus());
+        }
+
+        if (board.createNewBrick()) {
+            guiController.gameOver();
+        }
+
+        guiController.refreshGameBackground(board.getBoardMatrix());
+        return clearRow;
+    }
+
+    private void handleSoftDrop(MoveEvent event) {
+        if (event.getEventSource() == EventSource.USER) {
+            board.getScore().add(SOFT_DROP_SCORE);
+        }
     }
 
     @Override
@@ -70,6 +90,10 @@ public class GameController implements InputEventListener {
     @Override
     public void createNewGame() {
         board.newGame();
-        viewGuiController.refreshGameBackground(board.getBoardMatrix());
+        guiController.refreshGameBackground(board.getBoardMatrix());
+    }
+
+    public Board getBoard() {
+        return board;
     }
 }
