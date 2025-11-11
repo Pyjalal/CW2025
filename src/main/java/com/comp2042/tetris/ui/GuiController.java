@@ -207,4 +207,16 @@ public class GuiController implements Initializable {
     public void pauseGame(ActionEvent actionEvent) {
         gamePanel.requestFocus();
     }
+
+    public void updateDropSpeed(int newSpeed) {
+        if (timeLine != null) {
+            timeLine.stop();
+            timeLine = new Timeline(new KeyFrame(
+                Duration.millis(newSpeed),
+                ae -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
+            ));
+            timeLine.setCycleCount(Timeline.INDEFINITE);
+            timeLine.play();
+        }
+    }
 }

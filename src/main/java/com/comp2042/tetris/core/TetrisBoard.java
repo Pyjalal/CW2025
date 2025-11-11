@@ -17,6 +17,7 @@ public class TetrisBoard implements Board {
     private int[][] currentGameMatrix;
     private Point currentOffset;
     private final Score score;
+    private final LevelManager levelManager;
 
     public TetrisBoard(int width, int height) {
         this.width = width;
@@ -25,6 +26,7 @@ public class TetrisBoard implements Board {
         tetrominoGenerator = new RandomTetrominoGenerator();
         tetrominoRotator = new TetrominoRotator();
         score = new Score();
+        levelManager = new LevelManager();
     }
 
     @Override
@@ -102,8 +104,12 @@ public class TetrisBoard implements Board {
     public ClearRow clearRows() {
         ClearRow clearRow = MatrixOperations.checkRemoving(currentGameMatrix);
         currentGameMatrix = clearRow.getNewMatrix();
-        return clearRow;
 
+        if (clearRow.getLinesRemoved() > 0) {
+            levelManager.addClearedLines(clearRow.getLinesRemoved());
+        }
+
+        return clearRow;
     }
 
     @Override
@@ -111,11 +117,15 @@ public class TetrisBoard implements Board {
         return score;
     }
 
+    public LevelManager getLevelManager() {
+        return levelManager;
+    }
 
     @Override
     public void newGame() {
         currentGameMatrix = new int[width][height];
         score.reset();
+        levelManager.reset();
         createNewBrick();
     }
 }
