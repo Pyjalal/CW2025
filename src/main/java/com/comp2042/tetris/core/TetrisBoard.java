@@ -7,6 +7,7 @@ import com.comp2042.tetris.models.*;
 import com.comp2042.tetris.collision.CollisionDetector;
 
 import java.awt.*;
+import java.util.Optional;
 
 public class TetrisBoard implements Board {
 
@@ -18,6 +19,7 @@ public class TetrisBoard implements Board {
     private Point currentOffset;
     private final Score score;
     private final LevelManager levelManager;
+    private final HoldPieceManager holdPieceManager;
 
     public TetrisBoard(int width, int height) {
         this.width = width;
@@ -27,6 +29,7 @@ public class TetrisBoard implements Board {
         tetrominoRotator = new TetrominoRotator();
         score = new Score();
         levelManager = new LevelManager();
+        holdPieceManager = new HoldPieceManager();
     }
 
     @Override
@@ -82,6 +85,12 @@ public class TetrisBoard implements Board {
         Tetromino currentTetromino = tetrominoGenerator.getTetromino();
         tetrominoRotator.setBrick(currentTetromino);
         currentOffset = new Point(4, 10);
+
+        /* reset hold lock when a new piece spawns naturally
+         * this allows the player to use hold again for the new piece
+         */
+        holdPieceManager.resetHoldLock();
+
         return CollisionDetector.checkCollision(currentGameMatrix, tetrominoRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
     }
 
@@ -126,6 +135,57 @@ public class TetrisBoard implements Board {
         currentGameMatrix = new int[width][height];
         score.reset();
         levelManager.reset();
+        holdPieceManager.reset();
         createNewBrick();
+    }
+
+    /**
+     * Holds the current piece and swaps with previously held piece.
+     *
+     * <p>This implements the hold mechanic which allows players to store
+     * one piece for strategic use later. If no piece was held, the current
+     * piece is stored and a new piece spawns.</p>
+     *
+     * @return true if hold was successful, false if hold was already used this turn
+     */
+    @Override
+    public boolean holdCurrentPiece() {
+        if (!holdPieceManager.canHold()) {
+            return false;
+        }
+
+        /* get the current tetromino before swapping
+         * need to preserve this for the hold manager
+         */
+        Tetromino currentTetromino = tetrominoRotator.getTetromino();
+        Optional<Tetromino> previouslyHeld = holdPieceManager.holdPiece(currentTetromino);
+
+        if (previouslyHeld.isPresent()) {
+            /* swap with the previously held piece
+             * this gives the player their stored piece back
+             */
+            tetrominoRotator.setBrick(previouslyHeld.get());
+        } else {
+            /* no piece was held so spawn a new piece
+             * this is the first time the player uses hold
+             */
+            Tetromino newTetromino = tetrominoGenerator.getTetromino();
+            tetrominoRotator.setBrick(newTetromino);
+        }
+
+        /* reset position for the swapped piece
+         * this ensures consistent spawn position
+         */
+        currentOffset = new Point(4, 10);
+        return true;
+    }
+
+    @Override
+    public Optional<Tetromino> getHeldPiece() {
+        return holdPieceManager.getHeldPiece();
+    }
+
+    public HoldPieceManager getHoldPieceManager() {
+        return holdPieceManager;
     }
 }

@@ -88,6 +88,15 @@ public class GameController implements InputEventListener {
         return board.getViewData();
     }
 
+    @Override
+    public ViewData onHoldEvent(MoveEvent event) {
+        /* attempt to hold the current piece
+         * this allows strategic storage for later use
+         * the hold operation may fail if already used this turn
+         */
+        board.holdCurrentPiece();
+        return board.getViewData();
+    }
 
     @Override
     public void createNewGame() {

@@ -93,6 +93,12 @@ public class GuiController implements Initializable {
         } else if (code == KeyCode.DOWN || code == KeyCode.S) {
             moveDown(new MoveEvent(EventType.DOWN, EventSource.USER));
             keyEvent.consume();
+        } else if (code == KeyCode.C || code == KeyCode.SHIFT) {
+            /* hold piece using C or Shift key
+             * this follows standard modern Tetris controls
+             */
+            refreshBrick(eventListener.onHoldEvent(new MoveEvent(EventType.HOLD, EventSource.USER)));
+            keyEvent.consume();
         }
     }
 
