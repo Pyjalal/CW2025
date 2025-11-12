@@ -16,5 +16,10 @@ public interface InputEventListener {
 
     ViewData onRotateEvent(MoveEvent event);
 
+    /* hold piece event for strategic gameplay
+     * allows player to store current piece for later use
+     */
+    ViewData onHoldEvent(MoveEvent event);
+
     void createNewGame();
 }
