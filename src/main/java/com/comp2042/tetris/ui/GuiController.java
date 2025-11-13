@@ -49,6 +49,12 @@ public class GuiController implements Initializable {
 
     private Rectangle[][] rectangles;
 
+    /* ghost piece display for visual guidance
+     * shows semi-transparent preview of where piece will land
+     */
+    private GridPane ghostPanel;
+    private Rectangle[][] ghostRectangles;
+
     private Timeline timeLine;
 
     private final BooleanProperty isPause = new SimpleBooleanProperty();
@@ -122,6 +128,13 @@ public class GuiController implements Initializable {
                 brickPanel.add(rectangle, j, i);
             }
         }
+
+        /* initialize ghost piece panel for visual guidance
+         * shows semi-transparent preview of where piece will land
+         * this helps players make better placement decisions
+         */
+        initializeGhostPanel(brick);
+
         updateBrickPanelPosition(brick);
 
 
@@ -133,6 +146,36 @@ public class GuiController implements Initializable {
         timeLine.play();
     }
 
+    /**
+     * Initializes the ghost piece panel for visual guidance.
+     *
+     * <p>Creates a semi-transparent panel that shows where the current
+     * piece will land if dropped straight down. This helps players
+     * visualize piece placement before committing.</p>
+     */
+    private void initializeGhostPanel(ViewData brick) {
+        ghostPanel = new GridPane();
+        ghostPanel.setHgap(brickPanel.getHgap());
+        ghostPanel.setVgap(brickPanel.getVgap());
+
+        ghostRectangles = new Rectangle[brick.getBrickData().length][brick.getBrickData()[0].length];
+        for (int i = 0; i < brick.getBrickData().length; i++) {
+            for (int j = 0; j < brick.getBrickData()[i].length; j++) {
+                Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
+                rectangle.setFill(Color.TRANSPARENT);
+                ghostRectangles[i][j] = rectangle;
+                ghostPanel.add(rectangle, j, i);
+            }
+        }
+
+        /* add ghost panel to the same parent as brick panel
+         * but render it behind the actual piece
+         */
+        if (brickPanel.getParent() instanceof javafx.scene.layout.Pane parent) {
+            parent.getChildren().add(0, ghostPanel);
+        }
+    }
+
     private Paint getFillColor(int colorCode) {
         return ColorPalette.getColor(colorCode);
     }
@@ -142,6 +185,15 @@ public class GuiController implements Initializable {
         double y = -42 + gamePanel.getLayoutY() + brick.getyPosition() * (brickPanel.getHgap() + BRICK_SIZE);
         brickPanel.setLayoutX(x);
         brickPanel.setLayoutY(y);
+
+        /* update ghost piece position to show landing spot
+         * uses same X position but different Y based on drop calculation
+         */
+        if (ghostPanel != null) {
+            double ghostY = -42 + gamePanel.getLayoutY() + brick.getGhostYPosition() * (ghostPanel.getHgap() + BRICK_SIZE);
+            ghostPanel.setLayoutX(x);
+            ghostPanel.setLayoutY(ghostY);
+        }
     }
 
     private void refreshBrick(ViewData brick) {
@@ -150,9 +202,38 @@ public class GuiController implements Initializable {
             for (int i = 0; i < brick.getBrickData().length; i++) {
                 for (int j = 0; j < brick.getBrickData()[i].length; j++) {
                     setRectangleData(brick.getBrickData()[i][j], rectangles[i][j]);
+
+                    /* update ghost piece with semi-transparent version
+                     * only show ghost where piece has blocks
+                     */
+                    if (ghostRectangles != null) {
+                        setGhostRectangleData(brick.getBrickData()[i][j], ghostRectangles[i][j]);
+                    }
                 }
             }
         }
+    }
+
+    /**
+     * Sets ghost piece rectangle with semi-transparent styling.
+     *
+     * <p>The ghost piece uses reduced opacity to differentiate it
+     * from the actual piece while still being visible.</p>
+     */
+    private void setGhostRectangleData(int color, Rectangle rectangle) {
+        if (color != 0) {
+            /* use semi-transparent version of the piece color
+             * this makes the ghost visible but clearly different
+             */
+            Paint baseColor = getFillColor(color);
+            if (baseColor instanceof Color colorValue) {
+                rectangle.setFill(colorValue.deriveColor(0, 1, 1, 0.3));
+            }
+        } else {
+            rectangle.setFill(Color.TRANSPARENT);
+        }
+        rectangle.setArcHeight(9);
+        rectangle.setArcWidth(9);
     }
 
     public void refreshGameBackground(int[][] board) {

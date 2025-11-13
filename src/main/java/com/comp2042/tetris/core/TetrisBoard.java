@@ -101,7 +101,22 @@ public class TetrisBoard implements Board {
 
     @Override
     public ViewData getViewData() {
-        return new ViewData(tetrominoRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY(), tetrominoGenerator.getNextTetromino().getShapeMatrix().get(0));
+        /* calculate ghost piece position for visual guidance
+         * this shows the player where the piece will land
+         */
+        int ghostY = GhostPieceCalculator.calculateGhostY(
+            currentGameMatrix,
+            tetrominoRotator.getCurrentShape(),
+            currentOffset
+        );
+
+        return new ViewData(
+            tetrominoRotator.getCurrentShape(),
+            (int) currentOffset.getX(),
+            (int) currentOffset.getY(),
+            tetrominoGenerator.getNextTetromino().getShapeMatrix().get(0),
+            ghostY
+        );
     }
 
     @Override
