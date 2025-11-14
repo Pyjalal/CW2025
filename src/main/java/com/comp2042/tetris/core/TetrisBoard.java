@@ -20,6 +20,7 @@ public class TetrisBoard implements Board {
     private final Score score;
     private final LevelManager levelManager;
     private final HoldPieceManager holdPieceManager;
+    private final ComboManager comboManager;
 
     public TetrisBoard(int width, int height) {
         this.width = width;
@@ -30,6 +31,7 @@ public class TetrisBoard implements Board {
         score = new Score();
         levelManager = new LevelManager();
         holdPieceManager = new HoldPieceManager();
+        comboManager = new ComboManager();
     }
 
     @Override
@@ -129,6 +131,11 @@ public class TetrisBoard implements Board {
         ClearRow clearRow = MatrixOperations.checkRemoving(currentGameMatrix);
         currentGameMatrix = clearRow.getNewMatrix();
 
+        /* update combo based on whether lines were cleared
+         * this tracks consecutive successful clears
+         */
+        comboManager.onPieceLocked(clearRow.getLinesRemoved());
+
         if (clearRow.getLinesRemoved() > 0) {
             levelManager.addClearedLines(clearRow.getLinesRemoved());
         }
@@ -151,6 +158,7 @@ public class TetrisBoard implements Board {
         score.reset();
         levelManager.reset();
         holdPieceManager.reset();
+        comboManager.reset();
         createNewBrick();
     }
 
@@ -202,5 +210,9 @@ public class TetrisBoard implements Board {
 
     public HoldPieceManager getHoldPieceManager() {
         return holdPieceManager;
+    }
+
+    public ComboManager getComboManager() {
+        return comboManager;
     }
 }

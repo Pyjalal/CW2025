@@ -51,9 +51,19 @@ public class GameController implements InputEventListener {
         ClearRow clearRow = board.clearRows();
 
         if (clearRow.getLinesRemoved() > 0) {
-            int scoreBonus = clearRow.getScoreBonus() * ((TetrisBoard) board).getLevelManager().getScoreMultiplier();
-            board.getScore().add(scoreBonus);
-            guiController.updateDropSpeed(((TetrisBoard) board).getLevelManager().getDropSpeed());
+            TetrisBoard tetrisBoard = (TetrisBoard) board;
+
+            /* calculate base score with level multiplier */
+            int scoreBonus = clearRow.getScoreBonus() * tetrisBoard.getLevelManager().getScoreMultiplier();
+
+            /* add combo bonus for consecutive clears
+             * this rewards skilled play and makes the game more exciting
+             */
+            int comboBonus = tetrisBoard.getComboManager().getComboBonus();
+            int totalScore = scoreBonus + comboBonus;
+
+            board.getScore().add(totalScore);
+            guiController.updateDropSpeed(tetrisBoard.getLevelManager().getDropSpeed());
         }
 
         if (board.createNewBrick()) {
