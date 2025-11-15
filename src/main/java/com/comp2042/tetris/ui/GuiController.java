@@ -1,6 +1,8 @@
 package com.comp2042.tetris.ui;
 
 
+import com.comp2042.tetris.audio.SoundManager;
+import com.comp2042.tetris.audio.SoundType;
 import com.comp2042.tetris.events.*;
 
 import com.comp2042.tetris.models.*;
@@ -61,6 +63,11 @@ public class GuiController implements Initializable {
 
     private final BooleanProperty isGameOver = new SimpleBooleanProperty();
 
+    /* sound manager for audio feedback
+     * makes the game feel more alive and responsive
+     */
+    private SoundManager soundManager;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Font.loadFont(getClass().getClassLoader().getResource("digital.ttf").toExternalForm(), 38);
@@ -73,6 +80,11 @@ public class GuiController implements Initializable {
         reflection.setFraction(0.8);
         reflection.setTopOpacity(0.9);
         reflection.setTopOffset(-12);
+
+        /* initialize sound manager for audio feedback
+         * sounds make the game feel much more polished
+         */
+        soundManager = new SoundManager();
     }
 
     private void handleKeyPress(KeyEvent keyEvent) {
@@ -89,12 +101,15 @@ public class GuiController implements Initializable {
 
         if (code == KeyCode.LEFT || code == KeyCode.A) {
             refreshBrick(eventListener.onLeftEvent(new MoveEvent(EventType.LEFT, EventSource.USER)));
+            playSound(SoundType.MOVE);
             keyEvent.consume();
         } else if (code == KeyCode.RIGHT || code == KeyCode.D) {
             refreshBrick(eventListener.onRightEvent(new MoveEvent(EventType.RIGHT, EventSource.USER)));
+            playSound(SoundType.MOVE);
             keyEvent.consume();
         } else if (code == KeyCode.UP || code == KeyCode.W) {
             refreshBrick(eventListener.onRotateEvent(new MoveEvent(EventType.ROTATE, EventSource.USER)));
+            playSound(SoundType.ROTATE);
             keyEvent.consume();
         } else if (code == KeyCode.DOWN || code == KeyCode.S) {
             moveDown(new MoveEvent(EventType.DOWN, EventSource.USER));
@@ -104,7 +119,21 @@ public class GuiController implements Initializable {
              * this follows standard modern Tetris controls
              */
             refreshBrick(eventListener.onHoldEvent(new MoveEvent(EventType.HOLD, EventSource.USER)));
+            playSound(SoundType.HOLD);
             keyEvent.consume();
+        } else if (code == KeyCode.M) {
+            /* toggle sound with M key */
+            soundManager.toggleSound();
+            keyEvent.consume();
+        }
+    }
+
+    /**
+     * Plays a sound effect if sound is enabled.
+     */
+    private void playSound(SoundType type) {
+        if (soundManager != null) {
+            soundManager.play(type);
         }
     }
 
@@ -265,6 +294,15 @@ public class GuiController implements Initializable {
             NotificationPanel notificationPanel = new NotificationPanel("+" + clearRow.getScoreBonus());
             groupNotification.getChildren().add(notificationPanel);
             notificationPanel.showScore(groupNotification.getChildren());
+
+            /* play appropriate sound based on lines cleared
+             * tetris (4 lines) gets a special sound
+             */
+            if (clearRow.getLinesRemoved() >= 4) {
+                playSound(SoundType.TETRIS);
+            } else {
+                playSound(SoundType.CLEAR);
+            }
         }
     }
 
@@ -279,6 +317,7 @@ public class GuiController implements Initializable {
         timeLine.stop();
         gameOverPanel.setVisible(true);
         isGameOver.setValue(true);
+        playSound(SoundType.GAME_OVER);
     }
 
     public void newGame(ActionEvent actionEvent) {
