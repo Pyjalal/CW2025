@@ -53,6 +53,9 @@ public class GameController implements InputEventListener {
         if (clearRow.getLinesRemoved() > 0) {
             TetrisBoard tetrisBoard = (TetrisBoard) board;
 
+            /* update level manager with cleared lines */
+            tetrisBoard.getLevelManager().addClearedLines(clearRow.getLinesRemoved());
+
             /* calculate base score with level multiplier */
             int scoreBonus = clearRow.getScoreBonus() * tetrisBoard.getLevelManager().getScoreMultiplier();
 
@@ -63,6 +66,10 @@ public class GameController implements InputEventListener {
             int totalScore = scoreBonus + comboBonus;
 
             board.getScore().add(totalScore);
+            
+            /* Update UI with level, lines, and drop speed */
+            guiController.updateLevel(tetrisBoard.getLevelManager().getCurrentLevel());
+            guiController.updateLines(tetrisBoard.getLevelManager().getTotalLinesCleared());
             guiController.updateDropSpeed(tetrisBoard.getLevelManager().getDropSpeed());
         }
 
