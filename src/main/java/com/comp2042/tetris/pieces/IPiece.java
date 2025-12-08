@@ -5,7 +5,7 @@ import com.comp2042.tetris.utils.MatrixOperations;
 import java.util.ArrayList;
 import java.util.List;
 
-final class IPiece implements Tetromino {
+public final class IPiece implements Tetromino {
 
     private final List<int[][]> brickMatrix = new ArrayList<>();
 

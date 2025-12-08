@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      alignment="CENTER" spacing="30"
+      styleClass="root-pane"
+      prefWidth="500" prefHeight="400">
+
+    <padding><Insets top="50" right="50" bottom="50" left="50"/></padding>
+
+    <!-- Title -->
+    <Label text="TETRIS" styleClass="title-label"/>
+    <Label text="COMP2042 Coursework" styleClass="subtitle-label"/>
+
+    <!-- Menu buttons -->
+    <VBox spacing="15" alignment="CENTER">
+        <Button fx:id="singlePlayerBtn" text="Single Player" 
+                styleClass="menu-button" prefWidth="200" prefHeight="40"/>
+        <Button fx:id="multiplayerBtn" text="Multiplayer" 
+                styleClass="menu-button" prefWidth="200" prefHeight="40"/>
+        <Button fx:id="exitBtn" text="Exit" 
+                styleClass="menu-button" prefWidth="200" prefHeight="40"/>
+    </VBox>
+
+    <!-- Controls info -->
+    <VBox spacing="5" alignment="CENTER" styleClass="controls-info">
+        <Label text="Controls: Arrow Keys to Move, Up to Rotate" styleClass="label-small"/>
+        <Label text="Space for Hard Drop, C to Hold, M for Menu" styleClass="label-small"/>
+    </VBox>
+
+    <stylesheets>
+        <URL value="@window_style.css"/>
+    </stylesheets>
+</VBox>

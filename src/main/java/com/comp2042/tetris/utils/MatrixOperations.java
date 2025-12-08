@@ -17,11 +17,17 @@ public class MatrixOperations {
     }
 
     public static boolean intersect(final int[][] matrix, final int[][] brick, int x, int y) {
-        for (int i = 0; i < brick.length; i++) {
-            for (int j = 0; j < brick[i].length; j++) {
-                int targetX = x + i;
-                int targetY = y + j;
-                if (brick[j][i] != 0 && (checkOutOfBound(matrix, targetX, targetY) || matrix[targetY][targetX] != 0)) {
+        /* check if brick at position (x, y) intersects with matrix
+         * x = column position, y = row position
+         * both matrix and brick are structured as [row][col]
+         */
+        for (int pieceRow = 0; pieceRow < brick.length; pieceRow++) {
+            for (int pieceCol = 0; pieceCol < brick[pieceRow].length; pieceCol++) {
+                int boardRow = y + pieceRow;
+                int boardCol = x + pieceCol;
+                if (brick[pieceRow][pieceCol] != 0 && 
+                    (checkOutOfBound(matrix, boardRow, boardCol) || 
+                     matrix[boardRow][boardCol] != 0)) {
                     return true;
                 }
             }
@@ -29,12 +35,11 @@ public class MatrixOperations {
         return false;
     }
 
-    private static boolean checkOutOfBound(int[][] matrix, int targetX, int targetY) {
-        boolean returnValue = true;
-        if (targetX >= 0 && targetY < matrix.length && targetX < matrix[targetY].length) {
-            returnValue = false;
-        }
-        return returnValue;
+    private static boolean checkOutOfBound(int[][] matrix, int row, int col) {
+        /* check if row/col is outside matrix bounds
+         * matrix is [row][col] structure
+         */
+        return row < 0 || row >= matrix.length || col < 0 || col >= matrix[0].length;
     }
 
     public static int[][] copy(int[][] original) {
@@ -49,13 +54,20 @@ public class MatrixOperations {
     }
 
     public static int[][] merge(int[][] filledFields, int[][] brick, int x, int y) {
+        /* merge brick into board at position (x, y)
+         * x = column position, y = row position
+         * both board and brick are structured as [row][col]
+         */
         int[][] copy = copy(filledFields);
-        for (int i = 0; i < brick.length; i++) {
-            for (int j = 0; j < brick[i].length; j++) {
-                int targetX = x + i;
-                int targetY = y + j;
-                if (brick[j][i] != 0) {
-                    copy[targetY][targetX] = brick[j][i];
+        for (int pieceRow = 0; pieceRow < brick.length; pieceRow++) {
+            for (int pieceCol = 0; pieceCol < brick[pieceRow].length; pieceCol++) {
+                int boardRow = y + pieceRow;
+                int boardCol = x + pieceCol;
+                if (brick[pieceRow][pieceCol] != 0) {
+                    if (boardRow >= 0 && boardRow < copy.length &&
+                        boardCol >= 0 && boardCol < copy[0].length) {
+                        copy[boardRow][boardCol] = brick[pieceRow][pieceCol];
+                    }
                 }
             }
         }

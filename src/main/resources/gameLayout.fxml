@@ -1,26 +1,114 @@
-<?import com.comp2042.GameOverPanel?>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.comp2042.tetris.ui.GameOverPanel?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <?import java.net.URL?>
-<Pane fx:controller="com.comp2042.GuiController"
-      xmlns:fx="http://javafx.com/fxml">
-    <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
-    <BorderPane styleClass="gameBoard" fx:id="gameBoard">
-        <center>
-            <GridPane fx:id="gamePanel" hgap="1" vgap="1" layoutY="30" layoutX="40"/>
-        </center>
-    </BorderPane>
 
-    <Group fx:id="groupNotification" layoutX="14" layoutY="203">
-        <VBox alignment="CENTER">
-            <GameOverPanel fx:id="gameOverPanel"/>
+<BorderPane fx:controller="com.comp2042.tetris.ui.GuiController"
+            xmlns:fx="http://javafx.com/fxml"
+            styleClass="root-pane"
+            prefWidth="700" prefHeight="600">
+
+    <!-- Left side panel with score, level, lines -->
+    <left>
+        <VBox spacing="20" alignment="TOP_CENTER" styleClass="side-panel" minWidth="150">
+            <padding><Insets top="20" right="15" bottom="20" left="15"/></padding>
+
+            <!-- Score display -->
+            <VBox spacing="5" alignment="CENTER">
+                <Label text="SCORE" styleClass="label-title"/>
+                <Label fx:id="scoreLabel" text="0" styleClass="label-value"/>
+            </VBox>
+
+            <!-- Level display -->
+            <VBox spacing="5" alignment="CENTER">
+                <Label text="LEVEL" styleClass="label-title"/>
+                <Label fx:id="levelLabel" text="1" styleClass="label-value"/>
+            </VBox>
+
+            <!-- Lines display -->
+            <VBox spacing="5" alignment="CENTER">
+                <Label text="LINES" styleClass="label-title"/>
+                <Label fx:id="linesLabel" text="0" styleClass="label-value"/>
+            </VBox>
+
+            <!-- Hold piece display -->
+            <VBox spacing="5" alignment="CENTER">
+                <Label text="HOLD" styleClass="label-title"/>
+                <GridPane fx:id="holdPiecePanel" hgap="2" vgap="2" alignment="CENTER"
+                          styleClass="preview-panel" minWidth="80" minHeight="80"/>
+            </VBox>
         </VBox>
-    </Group>
+    </left>
+
+    <!-- Center game board -->
+    <center>
+        <StackPane styleClass="game-container" alignment="CENTER">
+            <!-- Game board with border - sized to fit 10 columns x 22 rows -->
+            <BorderPane styleClass="gameBoard" fx:id="gameBoard" maxWidth="230" maxHeight="480">
+                <center>
+                    <Pane fx:id="gamePanelContainer" prefWidth="210" prefHeight="462" maxWidth="210" maxHeight="462" >
+                        <GridPane fx:id="gamePanel" hgap="1" vgap="1"/>
+                        <!-- Brick panel for current piece - positioned relative to gamePanel -->
+                        <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
+                    </Pane>
+                </center>
+            </BorderPane>
+
+            <!-- Game over overlay -->
+            <Group fx:id="groupNotification">
+                <VBox alignment="CENTER">
+                    <GameOverPanel fx:id="gameOverPanel"/>
+                </VBox>
+            </Group>
+        </StackPane>
+    </center>
+
+    <!-- Right side panel with next piece and controls -->
+    <right>
+        <VBox spacing="20" alignment="TOP_CENTER" styleClass="side-panel" minWidth="150">
+            <padding><Insets top="20" right="15" bottom="20" left="15"/></padding>
+
+            <!-- Next piece display -->
+            <VBox spacing="5" alignment="CENTER">
+                <Label text="NEXT" styleClass="label-title"/>
+                <GridPane fx:id="nextPiecePanel" hgap="2" vgap="2" alignment="CENTER"
+                          styleClass="preview-panel" minWidth="80" minHeight="80"/>
+            </VBox>
+
+            <!-- Combo display -->
+            <VBox spacing="5" alignment="CENTER">
+                <Label text="COMBO" styleClass="label-title"/>
+                <Label fx:id="comboLabel" text="-" styleClass="label-value"/>
+            </VBox>
+
+            <!-- Control buttons -->
+            <VBox spacing="10" alignment="CENTER">
+                <Button text="New Game (N)" onAction="#newGame" styleClass="game-button" prefWidth="120"/>
+                <Button text="Pause (P)" onAction="#pauseGame" styleClass="game-button" prefWidth="120"/>
+                <Button text="Menu (M)" onAction="#backToMenu" styleClass="game-button" prefWidth="120"/>
+            </VBox>
+
+            <!-- Controls help -->
+            <VBox spacing="3" alignment="CENTER" styleClass="controls-help">
+                <Label text="CONTROLS" styleClass="label-small-title"/>
+                <Label text="← → : Move" styleClass="label-small"/>
+                <Label text="↑ : Rotate" styleClass="label-small"/>
+                <Label text="↓ : Soft Drop" styleClass="label-small"/>
+                <Label text="SPACE : Hard Drop" styleClass="label-small"/>
+                <Label text="C : Hold" styleClass="label-small"/>
+                <Label text="N : New Game" styleClass="label-small"/>
+                <Label text="M : Menu" styleClass="label-small"/>
+            </VBox>
+        </VBox>
+    </right>
+
     <stylesheets>
         <URL value="@window_style.css"/>
     </stylesheets>
-</Pane>
+</BorderPane>

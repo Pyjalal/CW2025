@@ -86,7 +86,7 @@ public class TetrisBoard implements Board {
     public boolean createNewBrick() {
         Tetromino currentTetromino = tetrominoGenerator.getTetromino();
         tetrominoRotator.setBrick(currentTetromino);
-        currentOffset = new Point(4, 10);
+        currentOffset = new Point(4, 2); /* spawn at column 4 (centered), row 2 (visible) */
 
         /* reset hold lock when a new piece spawns naturally
          * this allows the player to use hold again for the new piece
@@ -199,7 +199,7 @@ public class TetrisBoard implements Board {
         /* reset position for the swapped piece
          * this ensures consistent spawn position
          */
-        currentOffset = new Point(4, 10);
+        currentOffset = new Point(4, 2); /* spawn at column 4 (centered), row 2 (visible) */
         return true;
     }
 

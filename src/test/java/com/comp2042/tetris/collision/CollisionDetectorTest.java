@@ -13,12 +13,14 @@ class CollisionDetectorTest {
 
     @BeforeEach
     void setUp() {
-        emptyBoard = new int[10][20];
+        /* board is [row][col] - 20 rows, 10 columns for standard Tetris */
+        emptyBoard = new int[20][10];
 
-        partialBoard = new int[10][20];
-        partialBoard[0][19] = 1;
-        partialBoard[1][19] = 1;
-        partialBoard[2][19] = 1;
+        partialBoard = new int[20][10];
+        /* fill bottom row */
+        partialBoard[19][0] = 1;
+        partialBoard[19][1] = 1;
+        partialBoard[19][2] = 1;
 
         simplePiece = new int[][]{
             {1, 1},
@@ -38,6 +40,7 @@ class CollisionDetectorTest {
 
     @Test
     void testCheckCollision_RightBoundary_Collision() {
+        /* x=9, piece width=2, so col 9+1=10 is out of bounds (max col is 9) */
         assertTrue(CollisionDetector.checkCollision(emptyBoard, simplePiece, 9, 10));
     }
 
@@ -48,11 +51,13 @@ class CollisionDetectorTest {
 
     @Test
     void testCheckCollision_BottomBoundary_Collision() {
+        /* y=19, piece height=2, so row 19+1=20 is out of bounds (max row is 19) */
         assertTrue(CollisionDetector.checkCollision(emptyBoard, simplePiece, 4, 19));
     }
 
     @Test
     void testCheckCollision_WithExistingBlocks_Collision() {
+        /* piece at row 18 will overlap with blocks at row 19 */
         assertTrue(CollisionDetector.checkCollision(partialBoard, simplePiece, 0, 18));
     }
 
@@ -88,6 +93,7 @@ class CollisionDetectorTest {
 
     @Test
     void testCanMoveRight_CannotMove() {
+        /* at x=8, moving right to x=9 with 2-wide piece hits boundary */
         Point currentPos = new Point(8, 10);
         assertFalse(CollisionDetector.canMoveRight(emptyBoard, simplePiece, currentPos));
     }
@@ -100,6 +106,7 @@ class CollisionDetectorTest {
 
     @Test
     void testCanMoveDown_CannotMove() {
+        /* at y=18, moving down to y=19 with 2-tall piece hits boundary */
         Point currentPos = new Point(5, 18);
         assertFalse(CollisionDetector.canMoveDown(emptyBoard, simplePiece, currentPos));
     }
@@ -117,6 +124,7 @@ class CollisionDetectorTest {
 
     @Test
     void testCanRotate_InvalidRotation() {
+        /* 4-wide piece at x=7 goes to col 10, out of bounds */
         int[][] rotatedPiece = new int[][]{
             {1, 1, 1, 1}
         };

@@ -12,7 +12,7 @@ import com.comp2042.tetris.models.ClearRow;
 
 public class GameController implements InputEventListener {
 
-    private static final int BOARD_WIDTH = 25;
+    private static final int BOARD_WIDTH = 24;
     private static final int BOARD_HEIGHT = 10;
     private static final int SOFT_DROP_SCORE = 1;
 

@@ -5,21 +5,31 @@ import java.awt.Point;
 public class CollisionDetector {
 
     public static boolean checkCollision(int[][] board, int[][] piece, int x, int y) {
-        // check if piece collides with board boundaries or existing blocks
-        for (int row = 0; row < piece.length; row++) {
-            for (int col = 0; col < piece[row].length; col++) {
-                if (piece[row][col] != 0) {
-                    int boardX = x + col;
-                    int boardY = y + row;
+        /* check if piece collides with board boundaries or existing blocks
+         * board is structured as [row][col], where:
+         * - first dimension (board.length) = number of rows (vertical)
+         * - second dimension (board[0].length) = number of columns (horizontal)
+         * - x = column position, y = row position
+         */
+        for (int pieceRow = 0; pieceRow < piece.length; pieceRow++) {
+            for (int pieceCol = 0; pieceCol < piece[pieceRow].length; pieceCol++) {
+                if (piece[pieceRow][pieceCol] != 0) {
+                    int boardCol = x + pieceCol;
+                    int boardRow = y + pieceRow;
 
-                    // check boundaries
-                    if (boardX < 0 || boardX >= board.length ||
-                        boardY < 0 || boardY >= board[0].length) {
+                    /* check boundaries
+                     * boardRow must be within 0 to board.length-1 (rows)
+                     * boardCol must be within 0 to board[0].length-1 (columns)
+                     */
+                    if (boardRow < 0 || boardRow >= board.length ||
+                        boardCol < 0 || boardCol >= board[0].length) {
                         return true;
                     }
 
-                    // check collision with existing blocks
-                    if (board[boardX][boardY] != 0) {
+                    /* check collision with existing blocks
+                     * access board[row][col] correctly
+                     */
+                    if (board[boardRow][boardCol] != 0) {
                         return true;
                     }
                 }

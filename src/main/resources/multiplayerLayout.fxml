@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.comp2042.tetris.ui.GameOverPanel?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<BorderPane fx:controller="com.comp2042.tetris.ui.MultiplayerGuiController"
+            xmlns:fx="http://javafx.com/fxml"
+            styleClass="root-pane"
+            prefWidth="900" prefHeight="720">
+
+    <!-- Top bar with HP -->
+    <top>
+        <HBox alignment="CENTER" spacing="50" styleClass="hp-bar-container">
+            <padding><Insets top="10" bottom="10"/></padding>
+
+            <!-- Player 1 HP -->
+            <VBox alignment="CENTER" spacing="5">
+                <Label text="PLAYER 1" styleClass="player-label"/>
+                <HBox alignment="CENTER" spacing="10">
+                    <Label text="HP:" styleClass="hp-label"/>
+                    <ProgressBar fx:id="player1HpBar" progress="1.0" prefWidth="150" styleClass="hp-bar-p1"/>
+                    <Label fx:id="player1HpText" text="100" styleClass="hp-value"/>
+                </HBox>
+            </VBox>
+
+            <!-- VS Label -->
+            <Label text="VS" styleClass="vs-label"/>
+
+            <!-- Player 2 HP -->
+            <VBox alignment="CENTER" spacing="5">
+                <Label text="PLAYER 2" styleClass="player-label"/>
+                <HBox alignment="CENTER" spacing="10">
+                    <Label text="HP:" styleClass="hp-label"/>
+                    <ProgressBar fx:id="player2HpBar" progress="1.0" prefWidth="150" styleClass="hp-bar-p2"/>
+                    <Label fx:id="player2HpText" text="100" styleClass="hp-value"/>
+                </HBox>
+            </VBox>
+        </HBox>
+    </top>
+
+    <!-- Center with two game boards -->
+    <center>
+        <HBox alignment="CENTER" spacing="30">
+            <padding><Insets top="10" right="20" bottom="10" left="20"/></padding>
+
+            <!-- Player 1 Board -->
+            <VBox alignment="CENTER" spacing="10" styleClass="player-board">
+                <Label text="PLAYER 1 (WASD + C)" styleClass="board-label"/>
+                <BorderPane styleClass="gameBoard" fx:id="gameBoard1" maxWidth="230" maxHeight="480">
+                    <center>
+                        <Pane fx:id="gamePanelContainer1" prefWidth="210" prefHeight="462" maxWidth="210" maxHeight="462">
+                            <GridPane fx:id="gamePanel1" hgap="1" vgap="1"/>
+                            <GridPane fx:id="brickPanel1" vgap="1" hgap="1"/>
+                        </Pane>
+                    </center>
+                </BorderPane>
+                <HBox alignment="CENTER" spacing="20">
+                    <VBox alignment="CENTER" spacing="2">
+                        <Label text="SCORE" styleClass="stat-label"/>
+                        <Label fx:id="scoreLabel1" text="0" styleClass="stat-value"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="2">
+                        <Label text="LINES" styleClass="stat-label"/>
+                        <Label fx:id="linesLabel1" text="0" styleClass="stat-value"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="2">
+                        <Label text="NEXT" styleClass="stat-label"/>
+                        <GridPane fx:id="nextPiecePanel1" hgap="1" vgap="1" styleClass="mini-preview"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- Center info panel -->
+            <VBox alignment="CENTER" spacing="15" minWidth="100">
+                <Label fx:id="attackLabel" text="" styleClass="attack-label"/>
+                <VBox spacing="10" alignment="CENTER">
+                    <Button text="Back to Menu" onAction="#backToMenu" styleClass="game-button" prefWidth="100"/>
+                </VBox>
+                <VBox spacing="3" alignment="CENTER" styleClass="controls-mini">
+                    <Label text="P1: WASD + C" styleClass="label-tiny"/>
+                    <Label text="P1 Drop: SPACE" styleClass="label-tiny"/>
+                    <Label text="P2: Arrows + /" styleClass="label-tiny"/>
+                    <Label text="P2 Drop: ENTER" styleClass="label-tiny"/>
+                </VBox>
+            </VBox>
+
+            <!-- Player 2 Board -->
+            <VBox alignment="CENTER" spacing="10" styleClass="player-board">
+                <Label text="PLAYER 2 (Arrows + /)" styleClass="board-label"/>
+                <BorderPane styleClass="gameBoard" fx:id="gameBoard2" maxWidth="230" maxHeight="480">
+                    <center>
+                        <Pane fx:id="gamePanelContainer2" prefWidth="210" prefHeight="462" maxWidth="210" maxHeight="462">
+                            <GridPane fx:id="gamePanel2" hgap="1" vgap="1"/>
+                            <GridPane fx:id="brickPanel2" vgap="1" hgap="1"/>
+                        </Pane>
+                    </center>
+                </BorderPane>
+                <HBox alignment="CENTER" spacing="20">
+                    <VBox alignment="CENTER" spacing="2">
+                        <Label text="SCORE" styleClass="stat-label"/>
+                        <Label fx:id="scoreLabel2" text="0" styleClass="stat-value"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="2">
+                        <Label text="LINES" styleClass="stat-label"/>
+                        <Label fx:id="linesLabel2" text="0" styleClass="stat-value"/>
+                    </VBox>
+                    <VBox alignment="CENTER" spacing="2">
+                        <Label text="NEXT" styleClass="stat-label"/>
+                        <GridPane fx:id="nextPiecePanel2" hgap="1" vgap="1" styleClass="mini-preview"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </HBox>
+    </center>
+
+    <!-- Game over overlay -->
+    <Group fx:id="groupNotification">
+        <VBox alignment="CENTER">
+            <Label fx:id="winnerLabel" text="" styleClass="winner-label"/>
+        </VBox>
+    </Group>
+
+    <stylesheets>
+        <URL value="@window_style.css"/>
+    </stylesheets>
+</BorderPane>
