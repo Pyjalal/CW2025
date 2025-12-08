@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import java.net.URL?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      alignment="CENTER" spacing="30"
+      styleClass="root-pane"
+      prefWidth="500" prefHeight="450">
+
+    <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
+
+    <!-- Title -->
+    <Label text="SELECT DIFFICULTY" styleClass="menu-title"/>
+
+    <!-- Difficulty buttons -->
+    <VBox spacing="15" alignment="CENTER">
+        <Button fx:id="easyBtn" text="EASY" 
+                styleClass="menu-button difficulty-easy" prefWidth="250" prefHeight="50"/>
+        <Label text="Slow speed, 1x score multiplier" styleClass="label-small"/>
+        
+        <Button fx:id="mediumBtn" text="MEDIUM" 
+                styleClass="menu-button difficulty-medium" prefWidth="250" prefHeight="50"/>
+        <Label text="Normal speed, 1.5x score multiplier" styleClass="label-small"/>
+        
+        <Button fx:id="hardBtn" text="HARD" 
+                styleClass="menu-button difficulty-hard" prefWidth="250" prefHeight="50"/>
+        <Label text="Fast speed, 2x score multiplier" styleClass="label-small"/>
+    </VBox>
+
+    <!-- Back button -->
+    <HBox alignment="CENTER">
+        <Button fx:id="backBtn" text="← Back to Menu" 
+                styleClass="game-button" prefWidth="150"/>
+    </HBox>
+
+    <stylesheets>
+        <URL value="@window_style.css"/>
+    </stylesheets>
+</VBox>

@@ -9,6 +9,8 @@ import com.comp2042.tetris.events.EventSource;
 import com.comp2042.tetris.models.DownData;
 import com.comp2042.tetris.models.ViewData;
 import com.comp2042.tetris.models.ClearRow;
+import com.comp2042.tetris.patterns.DifficultyStrategy;
+import com.comp2042.tetris.patterns.MediumDifficulty;
 
 public class GameController implements InputEventListener {
 
@@ -18,10 +20,16 @@ public class GameController implements InputEventListener {
 
     private final Board board;
     private final GuiController guiController;
+    private final DifficultyStrategy difficulty;
 
     public GameController(GuiController guiController) {
+        this(guiController, new MediumDifficulty());
+    }
+
+    public GameController(GuiController guiController, DifficultyStrategy difficulty) {
         this.board = new TetrisBoard(BOARD_WIDTH, BOARD_HEIGHT);
         this.guiController = guiController;
+        this.difficulty = difficulty;
         initializeGame();
     }
 
@@ -30,6 +38,8 @@ public class GameController implements InputEventListener {
         guiController.setEventListener(this);
         guiController.initGameView(board.getBoardMatrix(), board.getViewData());
         guiController.bindScore(board.getScore().scoreProperty());
+        /* Apply difficulty settings - set initial drop speed */
+        guiController.updateDropSpeed(difficulty.getDropSpeed());
     }
 
     @Override
@@ -56,8 +66,10 @@ public class GameController implements InputEventListener {
             /* update level manager with cleared lines */
             tetrisBoard.getLevelManager().addClearedLines(clearRow.getLinesRemoved());
 
-            /* calculate base score with level multiplier */
-            int scoreBonus = clearRow.getScoreBonus() * tetrisBoard.getLevelManager().getScoreMultiplier();
+            /* calculate base score with level and difficulty multipliers */
+            int scoreBonus = clearRow.getScoreBonus() 
+                * tetrisBoard.getLevelManager().getScoreMultiplier()
+                * difficulty.getScoreMultiplier();
 
             /* add combo bonus for consecutive clears
              * this rewards skilled play and makes the game more exciting

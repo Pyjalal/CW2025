@@ -2,6 +2,10 @@ package com.comp2042;
 
 import com.comp2042.tetris.ui.GuiController;
 import com.comp2042.tetris.controllers.GameController;
+import com.comp2042.tetris.patterns.DifficultyStrategy;
+import com.comp2042.tetris.patterns.EasyDifficulty;
+import com.comp2042.tetris.patterns.MediumDifficulty;
+import com.comp2042.tetris.patterns.HardDifficulty;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -49,6 +53,36 @@ public class Main extends Application {
     }
 
     private void startSinglePlayer() {
+        showDifficultySelection();
+    }
+
+    private void showDifficultySelection() {
+        try {
+            URL location = getClass().getClassLoader().getResource("difficultySelect.fxml");
+            FXMLLoader fxmlLoader = new FXMLLoader(location);
+            Parent root = fxmlLoader.load();
+
+            /* Get buttons and set actions */
+            Button easyBtn = (Button) root.lookup("#easyBtn");
+            Button mediumBtn = (Button) root.lookup("#mediumBtn");
+            Button hardBtn = (Button) root.lookup("#hardBtn");
+            Button backBtn = (Button) root.lookup("#backBtn");
+
+            easyBtn.setOnAction(e -> startGameWithDifficulty(new EasyDifficulty()));
+            mediumBtn.setOnAction(e -> startGameWithDifficulty(new MediumDifficulty()));
+            hardBtn.setOnAction(e -> startGameWithDifficulty(new HardDifficulty()));
+            backBtn.setOnAction(e -> {
+                try { showMainMenu(); } catch (Exception ex) { ex.printStackTrace(); }
+            });
+
+            Scene scene = new Scene(root, 500, 450);
+            primaryStage.setScene(scene);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void startGameWithDifficulty(DifficultyStrategy difficulty) {
         try {
             URL location = getClass().getClassLoader().getResource("gameLayout.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(location);
@@ -61,7 +95,7 @@ public class Main extends Application {
             primaryStage.setMinHeight(500);
 
             root.requestFocus();
-            new GameController(c);
+            new GameController(c, difficulty);
         } catch (Exception e) {
             e.printStackTrace();
         }

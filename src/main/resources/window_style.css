@@ -266,3 +266,38 @@
     -fx-font-size: 10px;
     -fx-text-fill: #bdc3c7;
 }
+
+/* ==================== DIFFICULTY SELECTION ==================== */
+
+.difficulty-easy {
+    -fx-background-color: linear-gradient(to bottom, #27ae60, #1e8449);
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.difficulty-easy:hover {
+    -fx-background-color: linear-gradient(to bottom, #2ecc71, #27ae60);
+}
+
+.difficulty-medium {
+    -fx-background-color: linear-gradient(to bottom, #f39c12, #d68910);
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.difficulty-medium:hover {
+    -fx-background-color: linear-gradient(to bottom, #f5b041, #f39c12);
+}
+
+.difficulty-hard {
+    -fx-background-color: linear-gradient(to bottom, #e74c3c, #c0392b);
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.difficulty-hard:hover {
+    -fx-background-color: linear-gradient(to bottom, #ec7063, #e74c3c);
+}

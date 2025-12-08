@@ -176,7 +176,7 @@ public class GuiController implements Initializable {
             javafx.scene.control.Button mpBtn = (javafx.scene.control.Button) menuRoot.lookup("#multiplayerBtn");
             javafx.scene.control.Button exitBtn = (javafx.scene.control.Button) menuRoot.lookup("#exitBtn");
 
-            singlePlayerBtn.setOnAction(e -> startSinglePlayer(stage));
+            singlePlayerBtn.setOnAction(e -> showDifficultySelection(stage));
             mpBtn.setOnAction(e -> startMultiplayerFromMenu(stage));
             exitBtn.setOnAction(e -> javafx.application.Platform.exit());
         } catch (Exception e) {
@@ -184,7 +184,31 @@ public class GuiController implements Initializable {
         }
     }
 
-    private void startSinglePlayer(javafx.stage.Stage stage) {
+    private void showDifficultySelection(javafx.stage.Stage stage) {
+        try {
+            java.net.URL location = getClass().getClassLoader().getResource("difficultySelect.fxml");
+            javafx.fxml.FXMLLoader fxmlLoader = new javafx.fxml.FXMLLoader(location);
+            javafx.scene.Parent root = fxmlLoader.load();
+
+            /* Get buttons and set actions */
+            javafx.scene.control.Button easyBtn = (javafx.scene.control.Button) root.lookup("#easyBtn");
+            javafx.scene.control.Button mediumBtn = (javafx.scene.control.Button) root.lookup("#mediumBtn");
+            javafx.scene.control.Button hardBtn = (javafx.scene.control.Button) root.lookup("#hardBtn");
+            javafx.scene.control.Button backBtn = (javafx.scene.control.Button) root.lookup("#backBtn");
+
+            easyBtn.setOnAction(e -> startGameWithDifficulty(stage, new com.comp2042.tetris.patterns.EasyDifficulty()));
+            mediumBtn.setOnAction(e -> startGameWithDifficulty(stage, new com.comp2042.tetris.patterns.MediumDifficulty()));
+            hardBtn.setOnAction(e -> startGameWithDifficulty(stage, new com.comp2042.tetris.patterns.HardDifficulty()));
+            backBtn.setOnAction(e -> returnToMainMenu());
+
+            javafx.scene.Scene scene = new javafx.scene.Scene(root, 500, 450);
+            stage.setScene(scene);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void startGameWithDifficulty(javafx.stage.Stage stage, com.comp2042.tetris.patterns.DifficultyStrategy difficulty) {
         try {
             java.net.URL location = getClass().getClassLoader().getResource("gameLayout.fxml");
             javafx.fxml.FXMLLoader fxmlLoader = new javafx.fxml.FXMLLoader(location);
@@ -197,7 +221,7 @@ public class GuiController implements Initializable {
             stage.setMinHeight(500);
 
             root.requestFocus();
-            new com.comp2042.tetris.controllers.GameController(c);
+            new com.comp2042.tetris.controllers.GameController(c, difficulty);
         } catch (Exception e) {
             e.printStackTrace();
         }
